@@ -4,8 +4,9 @@ import queryString from 'query-string';
 //Начальное состояние
 const initialState = {
   items: [],
-  filter: {
-    items: [],
+  params: {
+    search: '',
+    offset: 6,
   },
   waiting: true,
   error: null,
@@ -15,39 +16,35 @@ const initialState = {
   },
 };
 
-// Загрузка списка фильтров категорий
-export const fetchFilters = createAsyncThunk(
-  'catalog/fetchFilters',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetch('http://localhost:7070/api/categories');
-      if (!response.ok) {
-        throw new Error('Ошибка получения категорий фильтра');
-      }
-      const json = await response.json();
-      return json;
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
-
 //Запрос на получение каталога
 export const fetchCatalog = createAsyncThunk(
   'catalog/fetchCatalog',
-  async (id = null, { rejectWithValue, dispatch }) => {
+  async (_, { rejectWithValue, dispatch, getState }) => {
     try {
-      const query = id ? `?categoryId=${id}` : ''; //! Посмотреть по параметрам + попробовать добавить поиск
+      dispatch(resetOffset()); // Оброс счетчика подгрузки
+
+      const { categories, catalog } = getState();
+      // Формируем параметры для загрузки
+      const params = queryString.stringify(
+        {
+          categoryId: categories.active,
+          q: catalog.params.search,
+        },
+        { skipNull: true, skipEmptyString: true }
+      );
+      const query = params ? '?' + params : '';
+      // console.log('Params:', `http://localhost:7070/api/items${query}`);
+
       const response = await fetch(`http://localhost:7070/api/items${query}`);
       if (!response.ok) {
         throw new Error('Ошибка загрузки данных "Каталог"');
       }
       const json = await response.json();
-      if (json.length < 6) dispatch(hideLoadMore()); // Если пришло меньше 6 элементов, скрываем кнопку
-      console.log('get catalog:', json)
+      // Если пришло меньше 6 элементов, скрываем кнопку
+      if (json.length < 6) dispatch(hideLoadMore());
       return json;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue('Упс, что-то пошло не так...');
     }
   }
 );
@@ -55,29 +52,31 @@ export const fetchCatalog = createAsyncThunk(
 // Подгрузка каталога по кнопке ещё
 export const fetchMoreCatalog = createAsyncThunk(
   'catalog/fetchMoreCatalog',
-  async (catalog, { rejectWithValue, dispatch }) => {
+  async (_, { rejectWithValue, dispatch, getState }) => {
     try {
-      const { id, offset } = catalog;
+      const { categories, catalog } = getState();
+      const { search, offset } = catalog.params;
       // Формируем параметры запроса
       const params = queryString.stringify(
         {
-          categoryId: id,
-          offset: offset,
+          categoryId: categories.active,
+          q: search,
+          offset: offset ? offset : '',
         },
         { skipNull: true, skipEmptyString: true }
       );
       console.log('Params:', params);
       const response = await fetch(`http://localhost:7070/api/items?${params}`);
       if (!response.ok) {
-        throw new Error('Ошибка загрузки дополнительных товаров')
+        throw new Error('Ошибка загрузки дополнительных товаров');
       }
       const json = await response.json();
-      console.log('moreLoad', json);
+      dispatch(setOffset());
       if (json.length < 6) dispatch(hideLoadMore()); // Если пришло меньше 6 элементов, скрываем кнопку
       return json;
     } catch (err) {
-        return rejectWithValue(err.message);
-    }    
+      return rejectWithValue('Упс, что-то пошло не так...');
+    }
   }
 );
 
@@ -87,6 +86,15 @@ const catalogSlice = createSlice({
   reducers: {
     hideLoadMore: (state) => {
       state.loadMore.show = false;
+    },
+    setSearchValue: (state, action) => {
+      state.params.search = action.payload;
+    },
+    setOffset: (state) => {
+      state.params.offset += 6;
+    },
+    resetOffset: (state) => {
+      state.params.offset = 6;
     },
   },
   extraReducers: {
@@ -106,13 +114,6 @@ const catalogSlice = createSlice({
       state.error = action.payload;
       console.warn(action.payload);
     },
-    [fetchFilters.fulfilled]: (state, action) => {
-      state.filter.items = action.payload;
-    },
-    [fetchFilters.rejected]: (state, action) => {
-      state.error = action.payload;
-      console.warn(action.payload);
-    },
     [fetchMoreCatalog.pending]: (state, action) => {
       state.loadMore.waiting = true;
       state.error = '';
@@ -121,13 +122,14 @@ const catalogSlice = createSlice({
       state.items = state.items.concat(action.payload);
       state.loadMore.waiting = false;
     },
-    [fetchMoreCatalog.rejected]: (state, action) => {           
+    [fetchMoreCatalog.rejected]: (state, action) => {
       state.loadMore.waiting = false;
-      state.error = action.payload; 
+      state.error = action.payload;
       console.warn(action.payload);
     },
   },
 });
 
-export const { hideLoadMore } = catalogSlice.actions;
+export const { hideLoadMore, setSearchValue, setOffset, resetOffset } =
+  catalogSlice.actions;
 export default catalogSlice.reducer;

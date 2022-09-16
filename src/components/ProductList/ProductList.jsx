@@ -1,4 +1,6 @@
+import React from 'react'
 import ProductCard from '../ProductCard/ProductCard';
+import PropTypes from 'prop-types';
 
 function ProductList({items}) {
   return (
@@ -8,4 +10,8 @@ function ProductList({items}) {
   )
 }
 
-export default ProductList;
+export default React.memo(ProductList);
+
+ProductList.propTypes = {
+  items: PropTypes.array.isRequired,
+}

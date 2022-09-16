@@ -1,62 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import Filter from '../../components/Filter/Filter';
+import React, { useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import Categories from '../Categories/Categories';
 import Preloader from '../../components/Preloader/Preloader';
 import LayoutCards from '../../components/LayoutCards/LayoutCards';
 import ProductList from '../../components/ProductList/ProductList';
 import LoadMore from '../../components/LoadMore/LoadMore';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCatalog, fetchFilters, fetchMoreCatalog } from './catalogSlice';
-import SearchForm from '../../components/SearchForm/SearchForm';
-import { useLocation } from 'react-router-dom';
+import Search from '../../components/Search/Search';
+import ErrorLoading from '../../components/ErrorLoading/ErrorLoading';
+import { fetchCatalog, fetchMoreCatalog, setSearchValue } from './catalogSlice';
 
 function Catalog() {
   const path = useLocation();
-  console.log('path', path.pathname === '/catalog'); //! Работает но проверить стили и др вариант
-
   const dispatch = useDispatch();
-  // Активный элемент фильтра
-  const [activeId, setActiveId] = useState(null);
-  // Количество элементов для пропуска подгрузки
-  const [offset, setOffset] = useState(6);
-
-  // Загрузка списка фильтра и каталога
-  useEffect(() => {
-    dispatch(fetchFilters());
-    dispatch(fetchCatalog());
-  }, [dispatch]);
+  // console.log('path', path.pathname === '/catalog'); //! Работает но проверить стили и др вариант
 
   const select = useSelector((state) => ({
     items: state.catalog.items,
-    filters: state.catalog.filter.items,
     waiting: state.catalog.waiting,
     error: state.catalog.error,
     isLoadingMore: state.catalog.loadMore.waiting,
     showLoadMore: state.catalog.loadMore.show,
+    searchValue: state.catalog.params.search,
+    activeCategory: state.categories.active,
   }));
 
+  useEffect(() => {
+    dispatch(fetchCatalog());
+  }, [select.activeCategory, dispatch]);
+
   const callbacks = {
-    onFilter: (id) => {
-      if (id === activeId) return; // Не загружаем при повторном клике по фильтру
-      dispatch(fetchCatalog(id));
-      setActiveId(() => id);
-      setOffset(6);
-    },
     onLoadMore: () => {
-      dispatch(fetchMoreCatalog({ id: activeId, offset }));
-      setOffset((prev) => prev + 6); //! Может быть косяк при ошибке загрузки(все равно прибавляет)
+      dispatch(fetchMoreCatalog());
     },
+    handleChange: useCallback(
+      (value) => {
+        dispatch(setSearchValue(value));
+      },
+      [dispatch]
+    ),
+    onSearch: useCallback(() => {
+      dispatch(fetchCatalog());
+    }, [dispatch]),
   };
 
-  // Список фильтров
-  const filters = [{ id: null, title: 'Все' }, ...select.filters];
-
   // Не показываем каталог если список пуст и не ожидаем загрузки
-  if (!select.items.length && !select.waiting) return null;
+  // if (!select.items.length && !select.waiting) return null;
+  if (select.error) return <ErrorLoading message={select.error} />;
 
   return (
     <LayoutCards className='catalog' title='Каталог'>
-      {path.pathname === '/catalog' && <SearchForm />}
-      <Filter items={filters} active={activeId} onFilter={callbacks.onFilter} />
+      {path.pathname === '/catalog' && (
+        <Search
+          value={select.searchValue}
+          handleChange={callbacks.handleChange}
+          onSearch={callbacks.onSearch}
+        />
+      )}
+      <Categories />
       {select.waiting && <Preloader />}
       {!!select.items.length && (
         <>
@@ -73,4 +74,4 @@ function Catalog() {
   );
 }
 
-export default Catalog;
+export default React.memo(Catalog);

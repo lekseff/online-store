@@ -12,7 +12,7 @@ function TopSales() {
     dispatch(fetchSales());
   }, [dispatch]);
 
-  const {items, waiting, error} = useSelector((state) => state.topSales);
+  const { items, waiting, error } = useSelector(({topSales}) => topSales);
 
   // Скрываем хиты продаж, если нет товаров и не ждем загрузки
   if (!items.length && !waiting) return null;

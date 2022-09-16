@@ -1,3 +1,5 @@
+import React from 'react';
+
 function NavPanel({ logo, children }) {
   return (
     <nav className='navbar navbar-expand-sm navbar-light bg-light'>
@@ -9,4 +11,4 @@ function NavPanel({ logo, children }) {
   );
 }
 
-export default NavPanel;
+export default React.memo(NavPanel);

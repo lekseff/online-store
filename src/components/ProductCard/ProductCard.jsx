@@ -1,22 +1,23 @@
-import photo from '../../assets/products/сlassic_sneakers.jpg'
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-function ProductCard(props) {
-  const {item} = props;
-  
+function ProductCard({ item }) {
   return (
     <div className='col-4'>
       <div className='card catalog-item-card'>
-        <img
-          src={item.images[0]}
-          className='card-img-top img-fluid'
-          alt={''}
-        />
+        <div className='card-image'>
+          <img
+            src={item.images[0]}
+            className='card-img-top img-fluid card-image-catalog'
+            alt={item.title}
+          />
+        </div>
         <div className='card-body'>
           <p className='card-text'>{item.title}</p>
           <p className='card-text'>{item.price} руб.</p>
-          <a href='/products/1.html' className='btn btn-outline-primary'>
+          <Link to={`/catalog/${item.id}`} className='btn btn-outline-primary'>
             Заказать
-          </a>
+          </Link>
         </div>
       </div>
     </div>
@@ -25,10 +26,11 @@ function ProductCard(props) {
 
 export default ProductCard;
 
-ProductCard.defaultProps = {
-  item: {
-    title: '',
-    images: '',
-    price: '',
-  }
-}
+ProductCard.propTypes = {
+  item: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    images: PropTypes.array.isRequired,
+    price: PropTypes.number.isRequired,
+  }),
+};

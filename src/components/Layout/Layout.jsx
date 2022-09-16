@@ -1,13 +1,11 @@
-function Layout(props) {
+function Layout({children}) {
   return (
-    <main className="container">
-    <div className="row">
-      <div className="col">
-        {props.children}
+    <main className='container'>
+      <div className='row'>
+        <div className='col'>{children}</div>
       </div>
-    </div>
-  </main>
-  )
+    </main>
+  );
 }
 
 export default Layout;

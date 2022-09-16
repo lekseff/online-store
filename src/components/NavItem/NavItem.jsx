@@ -1,5 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { NavLink } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 /**
  * Элемент списка навигации
@@ -19,3 +20,10 @@ function NavItem({ item }) {
 }
 
 export default React.memo(NavItem);
+
+NavItem.propTypes = {
+  item: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+  }),
+};

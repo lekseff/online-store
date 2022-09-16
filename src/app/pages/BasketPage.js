@@ -1,11 +1,12 @@
-import Basket from '../../components/Basket/Basket';
+import Basket from '../../containers/Basket/Basket';
 import OrderForm from '../../components/OrderForm/OrderForm';
 
 function BasketPage() {
   return (
-    <Basket>
+    <>
+      <Basket />
       <OrderForm />
-    </Basket>
+    </>
   );
 }
 

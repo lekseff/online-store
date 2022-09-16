@@ -183,13 +183,42 @@ section {
 
 .catalog-item-size {
   display: inline-block;
-  padding: 0 10px;
+  padding: 0 8px;
+  cursor: pointer;
+  border: 1px solid #727e86;
+  border-radius: 15px;
+  transition: all 0.1s ease-out;
+  user-select: none;
+}
+
+
+.catalog-item-size:nth-child(n+2) {
+  margin-left: 8px;
 }
 
 .catalog-item-size.selected {
   background: #727e86;
   border-radius: 15px;
   color: #fff;
+  transition: color 0.2s ease-out;
+}
+
+.catalog-item-size:hover {
+  transform: translateY(-2px);
+  transition: all 0.1s ease-out;
+}
+
+.catalog-search {
+  position: relative;
+}
+
+.catalog-controls-search {
+  position: absolute;
+  border: none;
+  background-color: transparent;
+  top: 3px;
+  right: 0;
+  background-position: -64px 0;
 }
 
 .catalog-search-form {
@@ -296,6 +325,15 @@ h2, .h2 {
   margin-top: 2em;
 }
 
+.btn-group-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  border-top: 1px solid #727e86;
+  border-bottom: 1px solid #727e86;
+}
+
 .btn-outline-primary {
   color: #727e86;
   border-color: #727e86;
@@ -304,4 +342,13 @@ h2, .h2 {
 .btn-outline-primary:hover {
   background-color: #727e86;
   border-color: #727e86;
+}
+
+.card-image {
+  height: 178px;
+}
+
+.card-image-catalog {
+  height: 100%;
+  object-fit: contain;
 }

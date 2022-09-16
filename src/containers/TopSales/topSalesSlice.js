@@ -8,18 +8,21 @@ const initialState = {
 };
 
 // Запрос на получение данных 'Хиты продаж'
-export const fetchSales = createAsyncThunk('sales/fetchSales', async (_, {rejectWithValue} ) => {
-  try {
-    const response = await fetch('http://localhost:7070/api/top-sales');
-    if (!response.ok) {
-      throw new Error('Ошибка получения данных блока "Хиты продаж"');
+export const fetchSales = createAsyncThunk(
+  'sales/fetchSales',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch('http://localhost:7070/api/top-sales');
+      if (!response.ok) {
+        throw new Error('Ошибка получения данных блока "Хиты продаж"');
+      }
+      const json = await response.json();
+      return json;
+    } catch (err) {
+      return rejectWithValue(err.message);
     }
-    const json = await response.json();
-    return json;
-  } catch (err) {
-    return rejectWithValue(err.message)
-  }  
-});
+  }
+);
 
 const topSalesSlice = createSlice({
   name: 'sales',
@@ -28,6 +31,7 @@ const topSalesSlice = createSlice({
     [fetchSales.pending]: (state) => {
       state.waiting = true;
       state.error = null;
+      state.items = [];
     },
     [fetchSales.fulfilled]: (state, action) => {
       state.waiting = false;
@@ -36,7 +40,7 @@ const topSalesSlice = createSlice({
     [fetchSales.rejected]: (state, action) => {
       state.waiting = false;
       state.error = 'Ошибка получения данных';
-      console.warn(action.payload, );
+      console.warn(action.payload);
     },
   },
 });

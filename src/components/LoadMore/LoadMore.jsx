@@ -1,8 +1,7 @@
 import Preloader from '../Preloader/Preloader';
+import PropTypes from 'prop-types';
 
-function LoadMore(props) {
-  const { show, isLoading, title } = props;
-
+function LoadMore({ show, isLoading, title, onLoadMore }) {
   //Если идет загрузка возвращаем лоадер
   if (isLoading) return <Preloader />;
 
@@ -12,7 +11,7 @@ function LoadMore(props) {
         <div className='text-center'>
           <button
             className='btn btn-outline-primary'
-            onClick={() => props.onLoadMore()}
+            onClick={() => onLoadMore()}
           >
             {title}
           </button>
@@ -23,3 +22,10 @@ function LoadMore(props) {
 }
 
 export default LoadMore;
+
+LoadMore.propTypes = {
+  show: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  onLoadMore: PropTypes.func.isRequired,
+};
