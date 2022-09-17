@@ -42,9 +42,14 @@ const basketSlice = createSlice({
       state.items = state.items.filter((item) => item.id !== action.payload.id);
       state.totalCount -= action.payload.count;
       state.totalPrice -= action.payload.price * action.payload.count;
-    }
+    },
+    restoreBasket: (state, action) => {
+      state.items = action.payload.items;
+      state.totalCount = action.payload.totalCount;
+      state.totalPrice = action.payload.totalPrice;
+    },
   },
 });
 
-export const { addToBasket, removeFromBasket } = basketSlice.actions;
+export const { addToBasket, removeFromBasket, restoreBasket } = basketSlice.actions;
 export default basketSlice.reducer;

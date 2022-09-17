@@ -1,3 +1,5 @@
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import ContactsPage from './pages/ContactsPage';
 import HomePage from './pages/HomePage';
@@ -10,8 +12,19 @@ import Header from '../containers/Header/Header';
 import Banner from '../components/Banner/Banner';
 import Layout from '../components/Layout/Layout';
 import Footer from '../components/Footer/Footer';
+import storage from '../services/storage';
+import { restoreBasket } from '../containers/Basket/basketSlice';
 
 function App() {
+  const dispatch = useDispatch();
+
+  // Восстановление корзины из LocalStorage;
+  React.useEffect(() => {
+    const data = storage.getStorage();
+    if (!data) return;
+    dispatch(restoreBasket(data));
+  }, [dispatch]);
+
   return (
     <>
       <Header />
