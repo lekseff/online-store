@@ -48,8 +48,13 @@ const basketSlice = createSlice({
       state.totalCount = action.payload.totalCount;
       state.totalPrice = action.payload.totalPrice;
     },
+    clearBasket: (state) => {
+      state.items = [];
+      state.totalCount = 0;
+      state.totalPrice = 0;
+    }
   },
 });
 
-export const { addToBasket, removeFromBasket, restoreBasket } = basketSlice.actions;
+export const { addToBasket, removeFromBasket, restoreBasket, clearBasket } = basketSlice.actions;
 export default basketSlice.reducer;

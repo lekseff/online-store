@@ -17,9 +17,12 @@ const storage = {
     return json;
   },
   setStorage(key, value) {
-    localStorage.removeItem(key);
+    this.clearStorage(key);
     localStorage.setItem(key, JSON.stringify(value));
   },
+  clearStorage(key) {
+    localStorage.removeItem(key);
+  }
 };
 
 export default storage;
