@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 function Search({ value, handleChange, onSearch }) {
+  console.log('Search')
+
   const callbacks = {
     handleChange: (value) => {
       handleChange(value);
@@ -12,6 +14,10 @@ function Search({ value, handleChange, onSearch }) {
       onSearch();
     },
   };
+
+  useEffect(() => {
+    return () => callbacks.handleChange('')
+  }, [])
 
   return (
     <div className={'catalog-search'}>

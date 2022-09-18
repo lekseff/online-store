@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BasketItem from '../../components/BasketItem/BasketItem';
 import { removeFromBasket } from './basketSlice';
 
 function Basket() {
-  // Scroll в начало страницы
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const dispatch = useDispatch();
   const { items, totalCount, totalPrice } = useSelector(({ basket }) => basket);
