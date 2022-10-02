@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchValue, fetchCatalog} from '../../containers/Catalog/catalogSlice';
+import {selectTotalCount} from '../../containers/Basket/selector';
 
 function NavControls() {
   const navigate = useNavigate();
@@ -11,7 +12,8 @@ function NavControls() {
   // Текст в поле ввода
   const [value, setValue] = useState('');
   // Общее количество товара в корзине
-  const {totalCount} = useSelector(({basket}) => basket);
+  // const {totalCount} = useSelector(({basket}) => basket);
+  const totalCount = useSelector(selectTotalCount);
 
   /**
    * Действие по кнопке открыть

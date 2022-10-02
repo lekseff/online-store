@@ -17,6 +17,7 @@ export const fetchData = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await fetch(`http://localhost:7070/api/items/${id}`);
+
       if (!response.ok) {
         throw new Error('Ошибка получения данных');
       }

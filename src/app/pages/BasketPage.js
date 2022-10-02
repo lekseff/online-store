@@ -5,6 +5,8 @@ import OrderForm from '../../components/OrderForm/OrderForm';
 import { clearBasket } from '../../containers/Basket/basketSlice';
 import Preloader from '../../components/Preloader/Preloader';
 import SuccessOrder from '../../components/SuccessOrder/SuccessOrder';
+import log from 'loglevel';
+import { createRequest } from '../../services/api';
 
 function BasketPage() {
   // Scroll в начало страницы
@@ -16,6 +18,10 @@ function BasketPage() {
   const [waiting, setWaiting] = useState(false); // Ожидание загрузки
   const [success, setSuccess] = useState(false); // Статус отправки формы заказа
   const basket = useSelector(({ basket }) => basket);
+
+  //В логах показываем только WARN
+  const basketPageLog = log.getLogger('BasketPage');
+  basketPageLog.setLevel('WARN');
 
   /**
    * Отправка формы заказа
@@ -29,8 +35,7 @@ function BasketPage() {
     const sendData = async (body) => {
       setWaiting(true);
       try {
-        const response = await fetch('http://localhost:7070/api/order', {
-          method: 'POST',
+        const response = await createRequest('/order', 'POST', {
           headers: {
             'Content-Type': 'application/json;charset=utf-8',
           },
@@ -41,7 +46,7 @@ function BasketPage() {
           setSuccess(true);
         }
       } catch (err) {
-        console.warn(err);
+        basketPageLog.warn(err);
       } finally {
         setWaiting(false);
       }

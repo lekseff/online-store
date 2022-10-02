@@ -2,11 +2,17 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BasketItem from '../../components/BasketItem/BasketItem';
 import { removeFromBasket } from './basketSlice';
+import { selectTotalPrice, selectTotalCount } from '../Basket/selector';
 
 function Basket() {
-
   const dispatch = useDispatch();
-  const { items, totalCount, totalPrice } = useSelector(({ basket }) => basket);
+  const { items } = useSelector(({ basket }) => basket);
+
+  // Получаем общее количество и стоимость
+  const { totalPrice, totalCount } = useSelector((state) => ({
+    totalPrice: selectTotalPrice(state),
+    totalCount: selectTotalCount(state),
+  }));
 
   const onRemoveProduct = (item) => {
     dispatch(removeFromBasket(item));

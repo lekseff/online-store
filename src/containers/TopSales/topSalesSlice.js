@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import log from 'loglevel';
+import {createRequest} from '../../services/api';
 
 // Начальное состояние
 const initialState = {
@@ -7,15 +9,17 @@ const initialState = {
   error: null,
 };
 
+// В логах показываем WARN и ERROR
+const topSalesLog = log.getLogger('TopSales');
+topSalesLog.setLevel(3);
+
 // Запрос на получение данных 'Хиты продаж'
 export const fetchSales = createAsyncThunk(
   'sales/fetchSales',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:7070/api/top-sales');
-      if (!response.ok) {
-        throw new Error('Ошибка получения данных блока "Хиты продаж"');
-      }
+      // Запрос на получение данных с API
+      const response = await createRequest('/top-sales');
       const json = await response.json();
       return json;
     } catch (err) {
@@ -40,7 +44,7 @@ const topSalesSlice = createSlice({
     [fetchSales.rejected]: (state, action) => {
       state.waiting = false;
       state.error = 'Ошибка получения данных';
-      console.warn(action.payload);
+      topSalesLog.warn(action.payload);
     },
   },
 });

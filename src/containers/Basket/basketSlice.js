@@ -3,8 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 //Начальное состояние
 const initialState = {
   items: [],
-  totalCount: 0,
-  totalPrice: 0,
 };
 
 /**
@@ -35,23 +33,15 @@ const basketSlice = createSlice({
   reducers: {
     addToBasket: (state, action) => {
       state.items = addProduct(state.items, action.payload);
-      state.totalPrice += (action.payload.price * action.payload.count);
-      state.totalCount += action.payload.count;
     },
     removeFromBasket: (state, action) => {
       state.items = state.items.filter((item) => item.id !== action.payload.id);
-      state.totalCount -= action.payload.count;
-      state.totalPrice -= action.payload.price * action.payload.count;
     },
     restoreBasket: (state, action) => {
       state.items = action.payload.items;
-      state.totalCount = action.payload.totalCount;
-      state.totalPrice = action.payload.totalPrice;
     },
     clearBasket: (state) => {
       state.items = [];
-      state.totalCount = 0;
-      state.totalPrice = 0;
     }
   },
 });

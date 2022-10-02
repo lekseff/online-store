@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import queryString from 'query-string';
+import log from 'loglevel';
+import { createRequest } from '../../services/api';
 
 //Начальное состояние
 const initialState = {
@@ -16,13 +18,16 @@ const initialState = {
   },
 };
 
+// В логах показываем WARN и ERROR
+const catalogLog = log.getLogger('Catalog');
+log.setLevel(3);
+
 //Запрос на получение каталога
 export const fetchCatalog = createAsyncThunk(
   'catalog/fetchCatalog',
   async (_, { rejectWithValue, dispatch, getState }) => {
     try {
       dispatch(resetOffset()); // Оброс счетчика подгрузки
-
       const { categories, catalog } = getState();
       // Формируем параметры для загрузки
       const params = queryString.stringify(
@@ -33,13 +38,9 @@ export const fetchCatalog = createAsyncThunk(
         { skipNull: true, skipEmptyString: true }
       );
       const query = params ? '?' + params : '';
-      // console.log('Params:', `http://localhost:7070/api/items${query}`);
-
-      const response = await fetch(`http://localhost:7070/api/items${query}`);
-      if (!response.ok) {
-        throw new Error('Ошибка загрузки данных "Каталог"');
-      }
-      const json = await response.json();
+      // Запрос на получение данных с API
+      const response = await createRequest(`/items${query}`);
+      const json = await response.json();      
       // Если пришло меньше 6 элементов, скрываем кнопку
       if (json.length < 6) dispatch(hideLoadMore());
       return json;
@@ -65,11 +66,8 @@ export const fetchMoreCatalog = createAsyncThunk(
         },
         { skipNull: true, skipEmptyString: true }
       );
-      console.log('Params:', params);
-      const response = await fetch(`http://localhost:7070/api/items?${params}`);
-      if (!response.ok) {
-        throw new Error('Ошибка загрузки дополнительных товаров');
-      }
+      // Запрос на получение данных с API 
+      const response = await createRequest(`/items?${params}`);
       const json = await response.json();
       dispatch(setOffset());
       if (json.length < 6) dispatch(hideLoadMore()); // Если пришло меньше 6 элементов, скрываем кнопку
@@ -112,7 +110,7 @@ const catalogSlice = createSlice({
     [fetchCatalog.rejected]: (state, action) => {
       state.waiting = false;
       state.error = action.payload;
-      console.warn(action.payload);
+      catalogLog.warn(action.payload);
     },
     [fetchMoreCatalog.pending]: (state, action) => {
       state.loadMore.waiting = true;
@@ -125,7 +123,7 @@ const catalogSlice = createSlice({
     [fetchMoreCatalog.rejected]: (state, action) => {
       state.loadMore.waiting = false;
       state.error = action.payload;
-      console.warn(action.payload);
+      catalogLog.warn(action.payload);
     },
   },
 });

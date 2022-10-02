@@ -12,7 +12,7 @@ function NavItem({ item }) {
 
   return (
     <li className='nav-item'>
-      <NavLink to={link} className='nav-link'>
+      <NavLink to={link} className='nav-link' end>
         {name}
       </NavLink>
     </li>

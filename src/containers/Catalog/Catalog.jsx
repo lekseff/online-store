@@ -13,21 +13,23 @@ import { fetchCatalog, fetchMoreCatalog, setSearchValue } from './catalogSlice';
 function Catalog() {
   const path = useLocation();
   const dispatch = useDispatch();
-  // console.log('path', path.pathname === '/catalog'); //! Работает но проверить стили и др вариант
 
-  const select = useSelector((state) => ({
-    items: state.catalog.items,
-    waiting: state.catalog.waiting,
-    error: state.catalog.error,
-    isLoadingMore: state.catalog.loadMore.waiting,
-    showLoadMore: state.catalog.loadMore.show,
-    searchValue: state.catalog.params.search,
-    activeCategory: state.categories.active,
+  const selectCatalog = useSelector(({ catalog }) => ({
+    items: catalog.items,
+    waiting: catalog.waiting,
+    error: catalog.error,
+    isLoadingMore: catalog.loadMore.waiting,
+    showLoadMore: catalog.loadMore.show,
+    searchValue: catalog.params.search,
+  }));
+
+  const selectCategories = useSelector(({ categories }) => ({
+    active: categories.active,
   }));
 
   useEffect(() => {
     dispatch(fetchCatalog());
-  }, [select.activeCategory, dispatch]);
+  }, [selectCategories.active, dispatch]);
 
   const callbacks = {
     onLoadMore: () => {
@@ -46,25 +48,26 @@ function Catalog() {
 
   // Не показываем каталог если список пуст и не ожидаем загрузки
   // if (!select.items.length && !select.waiting) return null;
-  if (select.error) return <ErrorLoading message={select.error} />;
+  if (selectCatalog.error)
+    return <ErrorLoading message={selectCatalog.error} />;
 
   return (
     <LayoutCards className='catalog' title='Каталог'>
       {path.pathname === '/catalog' && (
         <Search
-          value={select.searchValue}
+          value={selectCatalog.searchValue}
           handleChange={callbacks.handleChange}
           onSearch={callbacks.onSearch}
         />
       )}
       <Categories />
-      {select.waiting && <Preloader />}
-      {!!select.items.length && (
+      {selectCatalog.waiting && <Preloader />}
+      {!!selectCatalog.items.length && (
         <>
-          <ProductList items={select.items} />
+          <ProductList items={selectCatalog.items} />
           <LoadMore
-            show={select.showLoadMore}
-            isLoading={select.isLoadingMore}
+            show={selectCatalog.showLoadMore}
+            isLoading={selectCatalog.isLoadingMore}
             title={'Загрузить ещё'}
             onLoadMore={callbacks.onLoadMore}
           />

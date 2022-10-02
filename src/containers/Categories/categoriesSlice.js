@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import log from 'loglevel';
+import { createRequest } from '../../services/api'
 
 // Начальное состояние
 const initialState = {
@@ -6,18 +8,19 @@ const initialState = {
   active: null,
 };
 
+// В логах показываем WARN и ERROR
+const categoriesLog = log.getLogger('Categories');
+categoriesLog.setLevel(3); 
+
 /**
  * Загрузка списка фильтров категорий
  */
 export const fetchCategories = createAsyncThunk(
   'categories/fetchCategories',
   async (_, { rejectWithValue }) => {
-    // console.warn('Загрузка фильтров')
     try {
-      const response = await fetch('http://localhost:7070/api/categories');
-      if (!response.ok) {
-        throw new Error('Ошибка получения списка категорий');
-      }
+      // Запрос на получение данных с API
+      const response = await createRequest('/categories');
       const json = await response.json();
       return json;
     } catch (err) {
@@ -39,7 +42,7 @@ const categoriesSlice = createSlice({
       state.items = [{ id: null, title: 'Все' }].concat(action.payload);
     },
     [fetchCategories.rejected]: (state, action) => {
-      console.warn(action.payload);
+      categoriesLog.warn(action.payload);
     },
   },
 });
