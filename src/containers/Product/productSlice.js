@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createRequest } from '../../services/api';
 
 //Начальное состояние
 const initialState = {
@@ -16,11 +17,7 @@ export const fetchData = createAsyncThunk(
   'product/fetchData',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:7070/api/items/${id}`);
-
-      if (!response.ok) {
-        throw new Error('Ошибка получения данных');
-      }
+      const response = await createRequest(`/items/${id}`);
       const json = await response.json();
       return json;
     } catch (err) {

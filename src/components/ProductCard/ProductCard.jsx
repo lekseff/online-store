@@ -28,7 +28,7 @@ export default ProductCard;
 
 ProductCard.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     images: PropTypes.array.isRequired,
     price: PropTypes.number.isRequired,

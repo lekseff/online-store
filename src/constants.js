@@ -1,0 +1,1 @@
+export const MAX_COUNT_CARD = 6;

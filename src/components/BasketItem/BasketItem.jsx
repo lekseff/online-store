@@ -31,7 +31,7 @@ export default BasketItem;
 
 BasketItem.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     size: PropTypes.string.isRequired,

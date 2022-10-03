@@ -2,13 +2,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import queryString from 'query-string';
 import log from 'loglevel';
 import { createRequest } from '../../services/api';
+import { MAX_COUNT_CARD } from '../../constants'; // 6
 
 //Начальное состояние
 const initialState = {
   items: [],
   params: {
     search: '',
-    offset: 6,
+    page: 1,
   },
   waiting: true,
   error: null,
@@ -32,17 +33,19 @@ export const fetchCatalog = createAsyncThunk(
       // Формируем параметры для загрузки
       const params = queryString.stringify(
         {
-          categoryId: categories.active,
-          q: catalog.params.search,
+          category: categories.active,
+          title: catalog.params.search,
+          page: 1,
+          limit: MAX_COUNT_CARD,
         },
         { skipNull: true, skipEmptyString: true }
       );
-      const query = params ? '?' + params : '';
+
       // Запрос на получение данных с API
-      const response = await createRequest(`/items${query}`);
-      const json = await response.json();      
+      const response = await createRequest(`/items?${params}`);
+      const json = await response.json();
       // Если пришло меньше 6 элементов, скрываем кнопку
-      if (json.length < 6) dispatch(hideLoadMore());
+      if (json.length < MAX_COUNT_CARD) dispatch(hideLoadMore());
       return json;
     } catch (err) {
       return rejectWithValue('Упс, что-то пошло не так...');
@@ -56,21 +59,23 @@ export const fetchMoreCatalog = createAsyncThunk(
   async (_, { rejectWithValue, dispatch, getState }) => {
     try {
       const { categories, catalog } = getState();
-      const { search, offset } = catalog.params;
+      const { search, page } = catalog.params;
       // Формируем параметры запроса
       const params = queryString.stringify(
         {
-          categoryId: categories.active,
-          q: search,
-          offset: offset ? offset : '',
+          category: categories.active,
+          title: search,
+          limit: MAX_COUNT_CARD,
+          page: page + 1,
         },
         { skipNull: true, skipEmptyString: true }
       );
-      // Запрос на получение данных с API 
+      // Запрос на получение данных с API
+
       const response = await createRequest(`/items?${params}`);
       const json = await response.json();
       dispatch(setOffset());
-      if (json.length < 6) dispatch(hideLoadMore()); // Если пришло меньше 6 элементов, скрываем кнопку
+      if (json.length < MAX_COUNT_CARD) dispatch(hideLoadMore()); // Если пришло меньше 6 элементов, скрываем кнопку
       return json;
     } catch (err) {
       return rejectWithValue('Упс, что-то пошло не так...');
@@ -101,7 +106,7 @@ const catalogSlice = createSlice({
       state.waiting = true;
       state.error = null;
       state.loadMore.show = true;
-      // state.offset = null;
+      state.params.page = 1;
     },
     [fetchCatalog.fulfilled]: (state, action) => {
       state.items = action.payload;
@@ -118,6 +123,7 @@ const catalogSlice = createSlice({
     },
     [fetchMoreCatalog.fulfilled]: (state, action) => {
       state.items = state.items.concat(action.payload);
+      state.params.page += 1;
       state.loadMore.waiting = false;
     },
     [fetchMoreCatalog.rejected]: (state, action) => {
