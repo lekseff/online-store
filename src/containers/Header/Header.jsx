@@ -9,9 +9,9 @@ function Header() {
   // Список элементов меню
   const navItems = [
     { name: 'Главная', link: '/' },
-    { name: 'Каталог', link: 'catalog' },
-    { name: 'О магазине', link: 'about' },
-    { name: 'Контакты', link: 'contacts' },
+    { name: 'Каталог', link: '/catalog' },
+    { name: 'О магазине', link: '/about' },
+    { name: 'Контакты', link: '/contacts' },
   ];
 
   return (

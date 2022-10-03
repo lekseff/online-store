@@ -31,13 +31,12 @@ function App() {
       <Layout>
         <Banner />
         <Routes>
-          <Route path='/online-store' element={<HomePage />}>
-            <Route path='/contacts' element={<ContactsPage />} />
-            <Route path='/catalog/*' element={<CatalogPage />} />
-            <Route path='/catalog/:id' element={<ProductPage />} />
-            <Route path='/about' element={<AboutPage />} />
-            <Route path='/cart' element={<BasketPage />} />
-          </Route>
+          <Route path='/online-store' element={<HomePage />} />
+          <Route path='/contacts' element={<ContactsPage />} />
+          <Route path='/catalog/*' element={<CatalogPage />} />
+          <Route path='/catalog/:id' element={<ProductPage />} />
+          <Route path='/about' element={<AboutPage />} />
+          <Route path='/cart' element={<BasketPage />} />
           <Route path='*' element={<NoFoundPage />} />
         </Routes>
         <Footer />
