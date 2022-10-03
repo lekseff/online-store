@@ -31,7 +31,7 @@ function App() {
       <Layout>
         <Banner />
         <Routes>
-          <Route path='/' element={<HomePage />} />
+          <Route path='/online-store' element={<HomePage />} />
           <Route path='/contacts' element={<ContactsPage />} />
           <Route path='/catalog/*' element={<CatalogPage />} />
           <Route path='/catalog/:id' element={<ProductPage />} />
