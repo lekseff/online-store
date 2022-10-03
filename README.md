@@ -1,3 +1,8 @@
+![example workflow](https://github.com/lekseff/online-store/actions/workflows/deploy.yml/badge.svg)
+
+[GitHub Pages](https://lekseff.github.io/online-store/)
+
+
 # Дипломный проект курса «React»
 
 Дипломный проект представляет собой интернет-магазин обуви. Задача заключается в создании работающего приложения, всеми основными функциями которого можно пользоваться.
