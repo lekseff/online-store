@@ -53,7 +53,7 @@ function Catalog() {
 
   return (
     <LayoutCards className='catalog' title='Каталог'>
-      {path.pathname === '/catalog' && (
+      {path.pathname.endsWith('/catalog') && (
         <Search
           value={selectCatalog.searchValue}
           handleChange={callbacks.handleChange}
