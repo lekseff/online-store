@@ -8,10 +8,10 @@ import NavPanel from '../../components/NavPanel/NavPanel';
 function Header() {
   // Список элементов меню
   const navItems = [
-    { name: 'Главная', link: '/' },
-    { name: 'Каталог', link: '/catalog' },
-    { name: 'О магазине', link: '/about' },
-    { name: 'Контакты', link: '/contacts' },
+    { name: 'Главная', link: '/online-store' },
+    { name: 'Каталог', link: '/online-store/catalog' },
+    { name: 'О магазине', link: '/online-store/about' },
+    { name: 'Контакты', link: '/online-store/contacts' },
   ];
 
   return (

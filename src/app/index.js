@@ -32,11 +32,11 @@ function App() {
         <Banner />
         <Routes>
           <Route path='/online-store' element={<HomePage />} />
-          <Route path='/contacts' element={<ContactsPage />} />
-          <Route path='/catalog/*' element={<CatalogPage />} />
-          <Route path='/catalog/:id' element={<ProductPage />} />
-          <Route path='/about' element={<AboutPage />} />
-          <Route path='/cart' element={<BasketPage />} />
+          <Route path='/online-store/contacts' element={<ContactsPage />} />
+          <Route path='/online-store/catalog/*' element={<CatalogPage />} />
+          <Route path='/online-store/catalog/:id' element={<ProductPage />} />
+          <Route path='/online-store/about' element={<AboutPage />} />
+          <Route path='/online-store/cart' element={<BasketPage />} />
           <Route path='*' element={<NoFoundPage />} />
         </Routes>
         <Footer />
