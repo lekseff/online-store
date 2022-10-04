@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import getPath from '../../utils/getPath';
 
 function Footer() {
   return (
@@ -10,17 +11,17 @@ function Footer() {
             <h5>Информация</h5>
             <ul className='nav flex-column'>
               <li className='nav-item'>
-                <Link to={'/about'} className='nav-link'>
+                <Link to={getPath('/about')} className='nav-link'>
                   О магазине
                 </Link>
               </li>
               <li className='nav-item'>
-                <Link to={'/catalog'} className='nav-link'>
+                <Link to={getPath('/catalog')} className='nav-link'>
                   Каталог
                 </Link>
               </li>
               <li className='nav-item'>
-                <Link to={'/contacts'} className='nav-link'>
+                <Link to={getPath('/contacts')} className='nav-link'>
                   Контакты
                 </Link>
               </li>
