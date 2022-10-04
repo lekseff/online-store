@@ -14,6 +14,7 @@ import Layout from '../components/Layout/Layout';
 import Footer from '../components/Footer/Footer';
 import storage from '../services/storage';
 import { restoreBasket } from '../containers/Basket/basketSlice';
+import getPath from '../utils/getPath';
 
 function App() {
   const dispatch = useDispatch();
@@ -31,12 +32,12 @@ function App() {
       <Layout>
         <Banner />
         <Routes>
-          <Route path='/online-store' element={<HomePage />} />
-          <Route path='/online-store/contacts' element={<ContactsPage />} />
-          <Route path='/online-store/catalog/*' element={<CatalogPage />} />
-          <Route path='/online-store/catalog/:id' element={<ProductPage />} />
-          <Route path='/online-store/about' element={<AboutPage />} />
-          <Route path='/online-store/cart' element={<BasketPage />} />
+          <Route path={getPath()} element={<HomePage />} />
+          <Route path={getPath('/constants')} element={<ContactsPage />} />
+          <Route path={getPath('/catalog/*')} element={<CatalogPage />} />
+          <Route path={getPath('/catalog/:id')} element={<ProductPage />} />
+          <Route path={getPath('/about')} element={<AboutPage />} />
+          <Route path={getPath('/cart')} element={<BasketPage />} />
           <Route path='*' element={<NoFoundPage />} />
         </Routes>
         <Footer />

@@ -9,6 +9,7 @@ import {
 } from '../Product/productSlice';
 import { addToBasket } from '../Basket/basketSlice';
 import ProductLoader from '../../components/ProductLoader/ProductLoader';
+import getPath from '../../utils/getPath';
 
 
 function Product() {
@@ -46,7 +47,7 @@ function Product() {
         size: selectedSize,
       };
       dispatch(addToBasket(item));
-      navigate('/cart');
+      navigate(getPath('/cart'));
     },
   };
 

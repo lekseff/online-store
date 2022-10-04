@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/shipping_success.svg';
 import styles from './SuccessOrder.module.css';
+import getPath from '../../utils/getPath';
 
 function SuccessOrder() {
   return (
@@ -14,7 +15,7 @@ function SuccessOrder() {
           Ваш заказ успешно оформлен. В ближайшее время по указанному телефону с
           Вами свяжется наш менеджер
         </p>
-        <Link to='/catalog' className={styles.button}>
+        <Link to={getPath('/catalog')} className={styles.button}>
           Продолжить покупки
         </Link>
     </div>

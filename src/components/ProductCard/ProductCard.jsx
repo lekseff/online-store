@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import getPath from '../../utils/getPath';
 
 function ProductCard({ item }) {
   return (
@@ -15,7 +16,7 @@ function ProductCard({ item }) {
         <div className='card-body'>
           <p className='card-text'>{item.title}</p>
           <p className='card-text'>{item.price} руб.</p>
-          <Link to={`/catalog/${item.id}`} className='btn btn-outline-primary'>
+          <Link to={getPath(`/catalog/${item.id}`)} className='btn btn-outline-primary'>
             Заказать
           </Link>
         </div>

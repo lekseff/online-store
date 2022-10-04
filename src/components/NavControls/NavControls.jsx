@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchValue, fetchCatalog} from '../../containers/Catalog/catalogSlice';
 import {selectTotalCount} from '../../containers/Basket/selector';
+import getPath from '../../utils/getPath';
 
 function NavControls() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ function NavControls() {
   const onOpen = (event) => {
     event.preventDefault();
     if (value) {
-      navigate('/catalog');
+      navigate(getPath('/catalog'));
       dispatch(setSearchValue(value));
       dispatch(fetchCatalog());
        // Устанавливаем значение поиска из header в catalog
@@ -59,7 +60,7 @@ function NavControls() {
           />
         </form>
         <div
-          onClick={() => navigate('/cart')}
+          onClick={() => navigate(getPath('/cart'))}
           className='header-controls-pic header-controls-cart'
         >
           {totalCount > 0 && <div className='header-controls-cart-full'>{totalCount}</div>}

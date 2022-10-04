@@ -4,14 +4,15 @@ import HeaderLayout from '../../components/HeaderLayout/HeaderLayout';
 import NavList from '../../components/NavList/NavList';
 import NavControls from '../../components/NavControls/NavControls';
 import NavPanel from '../../components/NavPanel/NavPanel';
+import getPath from '../../utils/getPath';
 
 function Header() {
   // Список элементов меню
   const navItems = [
-    { name: 'Главная', link: '/online-store' },
-    { name: 'Каталог', link: '/online-store/catalog' },
-    { name: 'О магазине', link: '/online-store/about' },
-    { name: 'Контакты', link: '/online-store/contacts' },
+    { name: 'Главная', link: getPath() },
+    { name: 'Каталог', link: getPath('/catalog') },
+    { name: 'О магазине', link: getPath('/about') },
+    { name: 'Контакты', link: getPath('/contacts') },
   ];
 
   return (
