@@ -15,7 +15,7 @@ function ProductCard({ item }) {
         </div>
         <div className='card-body'>
           <p className='card-text'>{item.title}</p>
-          <p className='card-text'>{item.price} руб.</p>
+          <p className='card-text'><strong>{item.price}</strong> <span>руб.</span></p>
           <Link to={getPath(`/catalog/${item.id}`)} className='btn btn-outline-primary'>
             Заказать
           </Link>

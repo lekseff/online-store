@@ -3,6 +3,7 @@
 
 body {
   font-family: 'Roboto', sans-serif;
+  background-color: #f8f9fa;
 }
 
 a {
@@ -35,8 +36,9 @@ section {
   display: flex;
   justify-content: space-between;
   max-width: 280px;
-  margin-left: auto;
+  margin-left: auto;  
 }
+
 .header-controls-pic {
   height: 32px;
   width: 32px;
@@ -44,12 +46,20 @@ section {
   background-image: url(./assets/header-controls-sprite.png);
   background-repeat: no-repeat;
   cursor: pointer;
+  transition: transform 150ms ease-out;
 }
+
 .header-controls-search {
   position: relative;
   z-index: 1;
   background-position: -64px 0;
 }
+
+.header-controls-search:hover {
+  transform: scale(1.07);
+  transition: transform 150ms ease-out;
+}
+
 .header-controls-profile {
   position: relative;
   background-position: -32px 0;
@@ -58,6 +68,12 @@ section {
   position: relative;
   background-position: 0 0;
 }
+
+.header-controls-cart:hover {
+  transform: scale(1.07);
+  transition: transform 150ms ease-out;
+}
+
 .header-controls-cart-full {
   position: absolute;
   right: -10px;
@@ -98,6 +114,8 @@ section {
 /* Banner */
 .banner {
   position: relative;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .banner-header {
@@ -179,7 +197,17 @@ section {
 
 .catalog-item-card {
   margin-bottom: 1em;
+  border-radius: 16px;
+  overflow: hidden;
+  /* box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2); */
+  transition: all 0.2s ease-out;  
 }
+
+.catalog-item-card:hover {
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  transition: all 0.2s ease-out;
+}
+
 
 .catalog-item-size {
   display: inline-block;
@@ -228,6 +256,7 @@ section {
   padding: 0 20px;
   background: #FFFFFF;
   box-shadow: 0px 0px 10px #D4E4E6;
+  border: 1px solid rgba(0,0,0,.125);
   border-radius: 50px;
   margin-bottom: 2em;
 }
@@ -344,6 +373,7 @@ h2, .h2 {
   border-color: #727e86;
 }
 
+/* Card */
 .card-image {
   height: 178px;
 }
@@ -351,4 +381,12 @@ h2, .h2 {
 .card-image-catalog {
   height: 100%;
   object-fit: contain;
+}
+
+.card-body {
+  text-align: center;
+}
+
+.card-text span {
+  font-size: 0.8em;
 }
