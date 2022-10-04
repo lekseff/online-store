@@ -33,7 +33,7 @@ function App() {
         <Banner />
         <Routes>
           <Route path={getPath()} element={<HomePage />} />
-          <Route path={getPath('/constants')} element={<ContactsPage />} />
+          <Route path={getPath('/contacts')} element={<ContactsPage />} />
           <Route path={getPath('/catalog/*')} element={<CatalogPage />} />
           <Route path={getPath('/catalog/:id')} element={<ProductPage />} />
           <Route path={getPath('/about')} element={<AboutPage />} />
